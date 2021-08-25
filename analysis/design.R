@@ -75,7 +75,7 @@ variable_labels <-
     region ~ "Region",
     stp ~ "STP",
     vax1_day ~ "Day of vaccination",
-    jcvi_cat ~ "JCVI priority group"
+    jcvi_group ~ "JCVI priority group"
   ) %>%
   set_names(., map_chr(., all.vars))
 

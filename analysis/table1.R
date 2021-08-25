@@ -49,7 +49,6 @@ write_rds(tab_summary_baseline, here("output", "table1", "table1.rds"))
 gtsave(as_gt(tab_summary_baseline), here("output", "table1", "table1.html"))
 write_csv(tab_csv, here("output", "table1", "table1.csv"))
 
-
 tab_summary_region <- data_cohort %>%
   select(
     region, stp, vax1_type_descr
