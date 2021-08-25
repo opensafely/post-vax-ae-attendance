@@ -567,18 +567,18 @@ study = StudyDefinition(
   
   asthma = patients.satisfying(
     """
-      ast OR
-      (astadm AND astrxm1 AND astrxm2 AND astrxm3)
+      astadm OR
+      (ast AND astrxm1 AND astrxm2 AND astrxm3)
       """,
-    # Asthma Diagnosis code
-    ast = patients.with_these_clinical_events(
-      codelists.ast,
-      returning="binary_flag",
-      on_or_before="covid_vax_any_1_date - 1 day",
-    ),
     # Asthma Admission codes
     astadm=patients.with_these_clinical_events(
       codelists.astadm,
+      returning="binary_flag",
+      on_or_before="covid_vax_any_1_date - 1 day",
+    ),
+    # Asthma Diagnosis code
+    ast = patients.with_these_clinical_events(
+      codelists.ast,
       returning="binary_flag",
       on_or_before="covid_vax_any_1_date - 1 day",
     ),
