@@ -6,10 +6,20 @@ expectations:
 actions:
 
 
+  design:
+    run: r:latest analysis/design.R
+    outputs:
+      moderately_sensitive:
+        dates: analysis/lib/dates.json
+        groups: analysis/lib/diagnosis_groups.json
+        lookup: analysis/lib/diagnosis_groups_lookup.rds
+        labels: analysis/lib/variable_labels.rds
+
   extract:
     run: cohortextractor:latest generate_cohort --study-definition study_definition
       --output-format feather
     # dummy_data_file: -- not yet in use because of https://github.com/opensafely-core/cohort-extractor/issues/611#issuecomment-893544024
+    needs: [design]
     outputs:
       highly_sensitive:
         cohort: output/input.feather

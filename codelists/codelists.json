@@ -1,3 +1,82 @@
 {
-  "files": {}
+  "files": {
+    "opensafely-ethnicity.csv": {
+      "id": "opensafely/ethnicity/2020-04-27",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/ethnicity/2020-04-27/",
+      "downloaded_at": "2021-08-24 11:16:04.597109Z",
+      "sha": "3d2f3998b71863a80b24d60f6f4282e14191ae13"
+    },
+    "opensafely-covid-identification.csv": {
+      "id": "opensafely/covid-identification/2020-06-03",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification/2020-06-03/",
+      "downloaded_at": "2021-08-24 11:16:04.787308Z",
+      "sha": "124db6929439379b7dacd55ba26ae4f2ed9370bc"
+    },
+    "opensafely-covid-identification-in-primary-care-probable-covid-positive-test.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-probable-covid-positive-test/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-probable-covid-positive-test/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:05.002897Z",
+      "sha": "563b536aaf850da011233653e91e10030a5bc15f"
+    },
+    "opensafely-covid-identification-in-primary-care-probable-covid-clinical-code.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-probable-covid-clinical-code/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-probable-covid-clinical-code/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:05.191260Z",
+      "sha": "5de38f993b166d6ef97c6ea822635317a6c7ae85"
+    },
+    "opensafely-covid-identification-in-primary-care-probable-covid-sequelae.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-probable-covid-sequelae/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-probable-covid-sequelae/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:05.425951Z",
+      "sha": "38dc0c0a34e2b8b376ba72819923f442c30b4946"
+    },
+    "opensafely-covid-identification-in-primary-care-suspected-covid-advice.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-suspected-covid-advice/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-suspected-covid-advice/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:05.658184Z",
+      "sha": "b898d52ea318da16cbeea0ba2d2a1635b3673f90"
+    },
+    "opensafely-covid-identification-in-primary-care-suspected-covid-had-test.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-suspected-covid-had-test/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-suspected-covid-had-test/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:05.874257Z",
+      "sha": "c540d48e1d3ecce3d56f090f56bbe6d87e6fb459"
+    },
+    "opensafely-covid-identification-in-primary-care-suspected-covid-isolation-code.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-suspected-covid-isolation-code/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-suspected-covid-isolation-code/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:06.100950Z",
+      "sha": "36bba5f68368ff788ac243b5912df5db96c2b99c"
+    },
+    "opensafely-covid-identification-in-primary-care-suspected-covid-nonspecific-clinical-assessment.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-suspected-covid-nonspecific-clinical-assessment/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-suspected-covid-nonspecific-clinical-assessment/2020-07-16/",
+      "downloaded_at": "2021-08-24 11:16:06.298253Z",
+      "sha": "99d10fc347d107a8a7c490180ed91d39bd2e1275"
+    },
+    "opensafely-covid-identification-in-primary-care-exposure-to-disease.csv": {
+      "id": "opensafely/covid-identification-in-primary-care-exposure-to-disease/2020-06-23",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/covid-identification-in-primary-care-exposure-to-disease/2020-06-23/",
+      "downloaded_at": "2021-08-24 11:16:06.495676Z",
+      "sha": "b7cd77be113fa93776d072da047dc22b4a021091"
+    },
+    "primis-covid19-vacc-uptake-longres.csv": {
+      "id": "primis-covid19-vacc-uptake/longres/v1",
+      "url": "https://codelists.opensafely.org/codelist/primis-covid19-vacc-uptake/longres/v1/",
+      "downloaded_at": "2021-08-24 11:16:06.707716Z",
+      "sha": "4d4c94b9c6aa267c6a60657150bbc5ec7d2d7625"
+    },
+    "primis-covid19-vacc-uptake-shield.csv": {
+      "id": "primis-covid19-vacc-uptake/shield/v1",
+      "url": "https://codelists.opensafely.org/codelist/primis-covid19-vacc-uptake/shield/v1/",
+      "downloaded_at": "2021-08-24 11:16:06.930573Z",
+      "sha": "7edf08877d201478d4f794edb4d4dfe1353cb095"
+    },
+    "primis-covid19-vacc-uptake-nonshield.csv": {
+      "id": "primis-covid19-vacc-uptake/nonshield/v1",
+      "url": "https://codelists.opensafely.org/codelist/primis-covid19-vacc-uptake/nonshield/v1/",
+      "downloaded_at": "2021-08-24 11:16:07.121467Z",
+      "sha": "fb1e019781d5a58c5512d71e9cd6cf47c05e72c5"
+    }
+  }
 }
