@@ -175,6 +175,21 @@ sim_list = list(
     ~rbernoulli(n=1, p = 0.01)
   ),
 
+  cev_ever = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  cev = bn_node( ~rbernoulli(n=1, p = 0.02)),
+
+  asthma = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  chronic_neuro_disease = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  chronic_resp_disease = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  sev_obesity = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  diabetes = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  sev_mental = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  chronic_heart_disease = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  chronic_kidney_disease = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  chronic_liver_disease = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  immunosuppressed = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  asplenia = bn_node( ~rbernoulli(n=1, p = 0.02)),
+  learndis = bn_node( ~rbernoulli(n=1, p = 0.02)),
 
 
   emergency_day = bn_node(

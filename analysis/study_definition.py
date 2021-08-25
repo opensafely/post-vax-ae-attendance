@@ -516,6 +516,7 @@ study = StudyDefinition(
       return_expectations={"incidence": 0.01},
   ),
   
+  # Patients in long-stay nursing and residential care
   care_home_code=patients.with_these_clinical_events(
       codelists.carehome,
       on_or_before="index_date - 1 day",
@@ -524,6 +525,322 @@ study = StudyDefinition(
   ),
   
   
+################################################
+############ clinical variables         ########
+################################################
+
+  ## clinically extremely vulnerable
+  cev_ever = patients.with_these_clinical_events(
+    codelists.shield,
+    returning="binary_flag",
+    on_or_before = "covid_vax_any_1_date - 1 days",
+    find_last_match_in_period = True,
+    return_expectations={"incidence": 0.02},
+  ),
+  
+  cev = patients.satisfying(
+    "severely_clinically_vulnerable AND NOT less_vulnerable",
+  
+    ### SHIELDED GROUP - first flag all patients with "high risk" codes
+    severely_clinically_vulnerable=patients.with_these_clinical_events(
+      codelists.shield,
+      returning="binary_flag",
+      on_or_before = "covid_vax_any_1_date - 1 days",
+      find_last_match_in_period = True,
+    ),
+  
+    # find date at which the high risk code was added
+    severely_clinically_vulnerable_date=patients.date_of(
+      "severely_clinically_vulnerable",
+      date_format="YYYY-MM-DD",
+    ),
+  
+    ### NOT SHIELDED GROUP (medium and low risk) - only flag if later than 'shielded'
+    less_vulnerable=patients.with_these_clinical_events(
+      codelists.nonshield,
+      between=["severely_clinically_vulnerable_date + 1 day", "covid_vax_any_1_date - 1 days"],
+    ),
+  
+    return_expectations={"incidence": 0.01},
+  ),
+  
+  
+  asthma = patients.satisfying(
+    """
+      ast OR
+      (astadm AND astrxm1 AND astrxm2 AND astrxm3)
+      """,
+    # Asthma Diagnosis code
+    ast = patients.with_these_clinical_events(
+      codelists.ast,
+      returning="binary_flag",
+      on_or_before="covid_vax_any_1_date - 1 day",
+    ),
+    # Asthma Admission codes
+    astadm=patients.with_these_clinical_events(
+      codelists.astadm,
+      returning="binary_flag",
+      on_or_before="covid_vax_any_1_date - 1 day",
+    ),
+    # Asthma systemic steroid prescription code in month 1
+    astrxm1=patients.with_these_medications(
+      codelists.astrx,
+      returning="binary_flag",
+      between=["covid_vax_any_1_date - 31 days", "covid_vax_any_1_date - 1 days"],
+    ),
+    # Asthma systemic steroid prescription code in month 2
+    astrxm2=patients.with_these_medications(
+      codelists.astrx,
+      returning="binary_flag",
+      between=["covid_vax_any_1_date - 61 days", "covid_vax_any_1_date - 32 days"],
+    ),
+    # Asthma systemic steroid prescription code in month 3
+    astrxm3=patients.with_these_medications(
+      codelists.astrx,
+      returning="binary_flag",
+      between= ["covid_vax_any_1_date - 91 days", "covid_vax_any_1_date - 62 days"],
+    ),
+  
+  ),
+  
+  # Chronic Neurological Disease including Significant Learning Disorder
+  chronic_neuro_disease=patients.with_these_clinical_events(
+    codelists.cns_cov,
+    returning="binary_flag",
+    on_or_before="covid_vax_any_1_date - 1 day",
+  ),
+  
+  # Chronic Respiratory Disease
+  chronic_resp_disease = patients.satisfying(
+    "asthma OR resp_cov",
+    resp_cov=patients.with_these_clinical_events(
+      codelists.resp_cov,
+      returning="binary_flag",
+      on_or_before="covid_vax_any_1_date - 1 day",
+    ),
+  ),
+  
+  sev_obesity = patients.satisfying(
+    """
+      sev_obesity_date > bmi_date OR
+      bmi_value >= 40
+      """,
+  
+    bmi_stage_date=patients.with_these_clinical_events(
+      codelists.bmi_stage,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  
+    sev_obesity_date=patients.with_these_clinical_events(
+      codelists.sev_obesity,
+      returning="date",
+      find_last_match_in_period=True,
+      ignore_missing_values=True,
+      between= ["bmi_stage_date", "covid_vax_any_1_date - 1 day"],
+      date_format="YYYY-MM-DD",
+    ),
+  
+    bmi_date=patients.with_these_clinical_events(
+      codelists.bmi,
+      returning="date",
+      ignore_missing_values=True,
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  
+    bmi_value=patients.with_these_clinical_events(
+      codelists.bmi,
+      returning="numeric_value",
+      ignore_missing_values=True,
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      return_expectations={
+        "float": {"distribution": "normal", "mean": 25, "stddev": 5},
+      },
+    ),
+  
+  ),
+  
+  diabetes = patients.satisfying(
+    "dmres_date < diab_date",
+    diab_date=patients.with_these_clinical_events(
+      codelists.diab,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  
+    dmres_date=patients.with_these_clinical_events(
+      codelists.dmres,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  ),
+  
+  sev_mental=patients.satisfying(
+    "smhres_date < sev_mental_date",
+  
+    # Severe Mental Illness codes
+    sev_mental_date=patients.with_these_clinical_events(
+      codelists.sev_mental,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+    # Remission codes relating to Severe Mental Illness
+    smhres_date=patients.with_these_clinical_events(
+      codelists.smhres,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  ),
+  
+  
+  # Chronic heart disease codes
+  chronic_heart_disease=patients.with_these_clinical_events(
+    codelists.chd_cov,
+    returning="binary_flag",
+    on_or_before="covid_vax_any_1_date - 1 day",
+  ),
+  
+  chronic_kidney_disease=patients.satisfying(
+    """
+      ckd OR
+      (ckd15_date AND ckd35_date >= ckd15_date)
+      """,
+  
+    # Chronic kidney disease codes - all stages
+    ckd15_date=patients.with_these_clinical_events(
+      codelists.ckd15,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  
+    # Chronic kidney disease codes-stages 3 - 5
+    ckd35_date=patients.with_these_clinical_events(
+      codelists.ckd35,
+      returning="date",
+      find_last_match_in_period=True,
+      on_or_before="covid_vax_any_1_date - 1 day",
+      date_format="YYYY-MM-DD",
+    ),
+  
+    # Chronic kidney disease diagnostic codes
+    ckd=patients.with_these_clinical_events(
+      codelists.ckd_cov,
+      returning="binary_flag",
+      on_or_before="covid_vax_any_1_date - 1 day",
+    ),
+  ),
+  
+  
+  # Chronic Liver disease codes
+  chronic_liver_disease=patients.with_these_clinical_events(
+    codelists.cld,
+    returning="binary_flag",
+    on_or_before="covid_vax_any_1_date - 1 day",
+  ),
+  
+  
+  immunosuppressed=patients.satisfying(
+    "immrx OR immdx",
+  
+    # Immunosuppression diagnosis codes
+    immdx=patients.with_these_clinical_events(
+      codelists.immdx_cov,
+      returning="binary_flag",
+      on_or_before="covid_vax_any_1_date - 1 day",
+    ),
+    # Immunosuppression medication codes
+    immrx=patients.with_these_medications(
+      codelists.immrx,
+      returning="binary_flag",
+      between=["covid_vax_any_1_date - 6 months", "covid_vax_any_1_date - 1 day"]
+    ),
+  ),
+  
+  # Asplenia or Dysfunction of the Spleen codes
+  asplenia=patients.with_these_clinical_events(
+    codelists.spln_cov,
+    returning="binary_flag",
+    on_or_before="covid_vax_any_1_date - 1 day",
+  ),
+  
+  # Wider Learning Disability
+  learndis=patients.with_these_clinical_events(
+    codelists.learndis,
+    returning="binary_flag",
+    on_or_before="covid_vax_any_1_date - 1 day",
+  ),
+  
+  
+  # to represent household contact of shielding individual
+  # hhld_imdef_dat=patients.with_these_clinical_events(
+  #   codelists.hhld_imdef,
+  #   returning="date",
+  #   find_last_match_in_period=True,
+  #   on_or_before="covid_vax_any_1_date - 1 day",
+  #   date_format="YYYY-MM-DD",
+  # ),
+  # 
+  # #####################################
+  # # primis employment codelists
+  # #####################################
+  # 
+  # # Carer codes
+  # carer_date=patients.with_these_clinical_events(
+  #   codelists.carer,
+  #   returning="date",
+  #   find_last_match_in_period=True,
+  #   on_or_before="covid_vax_any_1_date - 1 day",
+  #   date_format="YYYY-MM-DD",
+  # ),
+  # # No longer a carer codes
+  # notcarer_date=patients.with_these_clinical_events(
+  #   codelists.notcarer,
+  #   returning="date",
+  #   find_last_match_in_period=True,
+  #   on_or_before="covid_vax_any_1_date - 1 day",
+  #   date_format="YYYY-MM-DD",
+  # ),
+  # # Employed by Care Home codes
+  # carehome_date=patients.with_these_clinical_events(
+  #   codelists.carehomeemployee,
+  #   returning="date",
+  #   find_last_match_in_period=True,
+  #   on_or_before="covid_vax_any_1_date - 1 day",
+  #   date_format="YYYY-MM-DD",
+  # ),
+  # # Employed by nursing home codes
+  # nursehome_date=patients.with_these_clinical_events(
+  #   codelists.nursehomeemployee,
+  #   returning="date",
+  #   find_last_match_in_period=True,
+  #   on_or_before="covid_vax_any_1_date - 1 day",
+  #   date_format="YYYY-MM-DD",
+  # ),
+  # # Employed by domiciliary care provider codes
+  # domcare_date=patients.with_these_clinical_events(
+  #   codelists.domcareemployee,
+  #   returning="date",
+  #   find_last_match_in_period=True,
+  #   on_or_before="covid_vax_any_1_date - 1 day",
+  #   date_format="YYYY-MM-DD",
+  # ),
+  
+    
   ################################################
   ############ post-vaccination events    ########
   ################################################

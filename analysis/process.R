@@ -160,6 +160,22 @@ data_processed <- data_extract %>%
 
     care_home_combined = care_home_tpp | care_home_code, # any carehome flag
 
+    # clinically at-risk group
+    cv = immunosuppressed | chronic_kidney_disease | chronic_resp_disease | diabetes | chronic_liver_disease |
+      chronic_neuro_disease | chronic_heart_disease | asplenia | learndis | sev_mental,
+
+    jcvi_cat = fct_case_when(
+      care_home_combined | age_mar20>=80 | hscworker  ~ "1 & 2",
+      age_mar20>=75 ~ "3",
+      age_mar20>=70 | cev ~ "4",
+      age_mar20>=65 ~ "5",
+      between(age_mar20, 16, 64.999) & cv ~ "6",
+      age_mar20>=60 ~ "7",
+      age_mar20>=55 ~ "8",
+      age_mar20>=50 ~ "9",
+      TRUE ~ "10"
+    ),
+
   ) %>%
   rowwise(patient_id) %>%
   mutate(
@@ -284,7 +300,7 @@ data_cohort <-
     (vax1_type=="pfizer" & vax1_date >= start_date_pfizer) |
     (vax1_type=="az" & vax1_date >= start_date_az) |
     (vax1_type=="moderna" & vax1_date >= start_date_moderna),
-    vax1_type == c("pfizer", "az", "moderna")
+    vax1_type %in% c("pfizer", "az", "moderna")
   )
 
 write_rds(data_cohort, here("output", "data", "data_cohort.rds"), compress="gz")
