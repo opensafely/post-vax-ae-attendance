@@ -15,6 +15,7 @@ actions:
         lookup: analysis/lib/diagnosis_groups_lookup.rds
         labels: analysis/lib/variable_labels.rds
 
+
   extract:
     run: cohortextractor:latest generate_cohort --study-definition study_definition
       --output-format feather
@@ -26,18 +27,14 @@ actions:
 
   process:
     run: r:latest analysis/process.R
-    needs:
-    - design
-    - extract
+    needs: [design, extract]
     outputs:
       highly_sensitive:
         cohort: output/data/data_cohort.rds
 
   descr_table1:
     run: r:latest analysis/table1.R
-    needs:
-    - design
-    - process
+    needs: [design, process]
     outputs:
       highly_sensitive:
         rds: output/table1/*.rds
@@ -47,9 +44,7 @@ actions:
 
   descr_vaxdate:
     run: r:latest analysis/vax_date.R
-    needs:
-    - design
-    - process
+    needs: [design, process]
     outputs:
       highly_sensitive:
         rds: output/vaxdate/*.rds
@@ -58,9 +53,7 @@ actions:
 
   descr_diagnoses:
     run: r:latest analysis/diagnoses.R
-    needs:
-    - design
-    - process
+    needs: [design, process]
     outputs:
       moderately_sensitive:
         png: output/diagnoses/*.png
