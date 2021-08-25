@@ -131,7 +131,7 @@ surv_plot <-
     panel.grid.minor.x = element_blank()
   )
 
-write_rds(surv_plot, file = here("output", "diagnoses", "plot_surv.rds"), compress='gz')
+write_rds(surv_plot, path = here("output", "diagnoses", "plot_surv.rds"), compress='gz')
 ggsave(
   surv_plot,
   filename=here("output", "diagnoses", "plot_surv.png"),
@@ -185,7 +185,7 @@ surv_diagnosis_plot <-
     strip.text.y = element_text(angle = 0, hjust = 0)
   )
 
-write_rds(surv_diagnosis_plot, file = here("output", "diagnoses", "plot_diagnosis_surv.rds"), compress='gz')
+write_rds(surv_diagnosis_plot, path = here("output", "diagnoses", "plot_diagnosis_surv.rds"), compress='gz')
 ggsave(
   surv_diagnosis_plot,
   filename=here("output", "diagnoses", "plot_diagnosis_surv.png"),
@@ -240,7 +240,7 @@ surv_plot_month <-
     strip.text.y = element_text(angle = 0, hjust = 0)
   )
 
-write_rds(surv_plot_month, file = here("output", "diagnoses", "plot_diagnosis_surv_month.rds"), compress='gz')
+write_rds(surv_plot_month, path = here("output", "diagnoses", "plot_diagnosis_surv_month.rds"), compress='gz')
 ggsave(
   surv_plot_month,
   filename=here("output", "diagnoses", "plot_diagnosis_surv_month.png"),
@@ -295,7 +295,7 @@ surv_plot_jcvi <-
     strip.text.y = element_text(angle = 0, hjust = 0)
   )
 
-write_rds(surv_plot_jcvi, file = here("output", "diagnoses", "plot_diagnosis_surv_jcvi.rds"), compress='gz')
+write_rds(surv_plot_jcvi, path = here("output", "diagnoses", "plot_diagnosis_surv_jcvi.rds"), compress='gz')
 ggsave(
   surv_plot_jcvi,
   filename=here("output", "diagnoses", "plot_diagnosis_surv_jcvi.png"),
