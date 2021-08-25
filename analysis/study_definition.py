@@ -92,7 +92,7 @@ study = StudyDefinition(
     """
         registered
         AND
-        (age >= 18 AND age < 120)
+        (age >= 16 AND age < 120)
         AND
         NOT died
         AND 
