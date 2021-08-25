@@ -41,7 +41,7 @@ lookup <- read_rds(here("analysis", "lib", "diagnosis_groups_lookup.rds"))
 
 # Introduction
 
-Three vaccines have been used as part of the national COVID-19 vaccination programme in England to date: Pfizer-BioNTech BNT162b2 mRNA (*BNT162b2*), Oxford-AstraZeneca ChAdOx1 nCoV-19 AZD1222 (*ChAdOx1*), and Moderna CX-024414 mRNA-1273 (*Moderna*). This report describes rates of attendances to accident and emergency departments (A&E) in the first 2 weeks following the first dose of these vaccines. 
+Three vaccines have been used as part of the national COVID-19 vaccination programme in England to date: Pfizer-BioNTech BNT162b2 mRNA (*BNT162b2*), Oxford-AstraZeneca ChAdOx1 nCoV-19 (*ChAdOx1*), and Moderna mRNA-1273 (*Moderna*). This report describes rates of attendances to accident and emergency departments (A&E) in the first 2 weeks following the first dose of these vaccines. 
 
 The code and data for this report can be found at the OpenSafely [post-vax-ae_attendances GitHub repository](https://github.com/opensafely/post-vax-ae-attendances). 
 
