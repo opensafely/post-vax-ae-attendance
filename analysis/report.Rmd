@@ -1,0 +1,131 @@
+---
+title: "Post-vaccination Accident and Emergency Department Attendances"
+output:
+  #github_document:
+  #  keep_html: TRUE
+  #  code_folding: hide
+  #  keep_md: yes
+  #pdf_document: default
+  #md_document:
+  #   variant: gfm
+  html_document:
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+
+library('tidyverse')
+library('here')
+library('glue')
+library('lubridate')
+library('gt')
+library('patchwork')
+
+
+output_dir <- here("output")
+
+fs::dir_create(output_dir, "report", "figures")
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.path = paste0(fs::path(output_dir, "report", "figures"), "/")
+)
+
+studydates <- jsonlite::read_json(
+  path=here("analysis", "lib", "dates.json")
+)
+
+lookup <- read_rds(here("analysis", "lib", "diagnosis_groups_lookup.rds")) 
+
+```
+
+# Introduction
+
+Three vaccines have been used as part of the national COVID-19 vaccination programme in England to date: Pfizer-BioNTech BNT162b2 mRNA (*BNT162b2*), Oxford-AstraZeneca ChAdOx1 nCoV-19 AZD1222 (*ChAdOx1*), and Moderna CX-024414 mRNA-1273 (*Moderna*). This report describes rates of attendances to accident and emergency departments (A&E) in the first 2 weeks following the first dose of these vaccines. 
+
+The code and data for this report can be found at the OpenSafely [post-vax-ae_attendances GitHub repository](https://github.com/opensafely/post-vax-ae-attendances). 
+
+
+# Methods
+
+People meeting the following criteria are included:
+
+* People receiving their ever first vaccine dose as part of the national COVID-19 vaccination programme (i.e., not administered in clinical trials):
+  * BNT162b2 received on or after `r format(as.Date(studydates$start_date_pfizer), "%d %B %Y")`;
+  * ChAdOx1 received on or after `r format(as.Date(studydates$start_date_az), "%d %B %Y")`;
+  * Moderna received on or after `r format(as.Date(studydates$start_date_moderna), "%d %B %Y")`.
+* Registered at a GP practice using TPP's SystmOne clinical information system on the day before vaccination.
+* Aged 16 or over.
+
+The vaccination brand is available in the GP record directly, via the National Immunisation Management System (NIMS).
+
+A&E attendances are identified using linked data from the Emergency Care Data Set (ECDS) provided by NHS Digital's Secondary Use Service (SUS), which holds records on all attendances to A&E departments. For each A&E attendance, one or more diagnosis codes are recorded. These have been categorised into `r nrow(lookup)` categories, detailed below.
+
+Vaccine recipients are classified into one of the [10 vaccine priority groups defined by the Joint Committee on Vaccination and Immunisation (JCVI)](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007737/Greenbook_chapter_14a_30July2021.pdf#page=12) expert working group. These are based on demographic, clinical, or occupational characteristics identified on or before the vaccination date, except for age, which is determined as of 31 March 2020.
+
+# Results
+
+Note all counts below 6 are redacted and survival estimates are rounded for disclosure control.
+
+## Characteristics as at vaccination date
+
+### Overall
+```{r table1, echo=FALSE}
+read_rds(here("output", "table1", "table1.rds"))
+```
+
+
+## Vaccination dates
+
+
+### Overall
+```{r, vaxdate, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', results='asis'}
+  vaxdate_plot <- read_rds(here("output", "vaxdate", "plot_vaxdate_stack.rds"))
+  print(vaxdate_plot)
+  cat("  \n\n")
+```
+
+### By JCVI priority group
+
+```{r, vaxdate_jcvi, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=8, results='asis'}
+  vaxdate_plot <- read_rds(here("output", "vaxdate", "plot_vaxdate_stack_jcvi.rds"))
+  print(vaxdate_plot)
+  cat("  \n\n")
+```
+
+## A&E attendances
+
+### Overall
+
+```{r, surv, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', results='asis'}
+  surv_plot <- read_rds(here("output", "diagnoses", "plot_surv.rds"))
+  print(surv_plot)
+  cat("  \n\n")
+```
+
+### Diagnosis-specific attendances
+
+```{r, surv_diagnosis, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=6, results='asis'}
+  surv_plot <- read_rds(here("output", "diagnoses", "plot_diagnosis_surv.rds"))
+  print(surv_plot)
+  cat("  \n\n")
+```
+
+
+### Diagnosis-specific attendances, by JCVI group
+
+```{r, surv_diagnosis_jcvi, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%',fig.height=8, results='asis'}
+  surv_plot <- read_rds(here("output", "diagnoses", "plot_diagnosis_surv_jcvi.rds"))
+  print(surv_plot)
+  cat("  \n\n")
+```
+
+
+### Diagnosis-specific attendances, by month of vaccination
+
+```{r, surv_diagnosis_month, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=8,  results='asis'}
+  surv_plot <- read_rds(here("output", "diagnoses", "plot_diagnosis_surv_month.rds"))
+  print(surv_plot)
+  cat("  \n\n")
+```
+
