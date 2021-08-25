@@ -175,8 +175,6 @@ sim_list = list(
     ~rbernoulli(n=1, p = 0.01)
   ),
 
-  cev_ever = bn_node( ~rbernoulli(n=1, p = 0.02)),
-  cev = bn_node( ~rbernoulli(n=1, p = 0.02)),
 
 
   emergency_day = bn_node(

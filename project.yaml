@@ -23,6 +23,44 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/input.feather
+
+  process:
+    run: r:latest analysis/process.R
+    needs:
+    - design
+    - extract
     outputs:
       highly_sensitive:
-        cohort: output/input.csv
+        cohort: output/data/data_cohort.rds
+
+  descr_table1:
+    run: r:latest analysis/table1.R
+    needs:
+    - design
+    - process
+    outputs:
+      highly_sensitive:
+        rds: output/table1/*.rds
+      moderately_sensitive:
+        html: output/table1/*.html
+        csv: output/table1/*.csv
+
+  descr_vaxdate:
+    run: r:latest analysis/vax_date.R
+    needs:
+    - design
+    - process
+    outputs:
+      highly_sensitive:
+        rds: output/vaxdate/*.rds
+      moderately_sensitive:
+        png: output/vaxdate/*.png
+
+  descr_diagnoses:
+    run: r:latest analysis/diagnoses.R
+    needs:
+    - design
+    - process
+    outputs:
+      moderately_sensitive:
+        png: output/diagnoses/*.png

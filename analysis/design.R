@@ -74,10 +74,10 @@ variable_labels <-
     imd_Q5 ~ "IMD",
     region ~ "Region",
     stp ~ "STP",
-    vax1_day ~ "Day of vaccination",
-    jcvi_cat ~ "JCVI priority group"
+    vax1_day ~ "Day of vaccination"#,
+    #jcvi_cat ~ "JCVI priority group"
   ) %>%
   set_names(., map_chr(., all.vars))
 
-write_rds(variable_labels, here("output", "lib", "variable_labels.rds"))
+write_rds(variable_labels, here("analysis", "lib", "variable_labels.rds"))
 
