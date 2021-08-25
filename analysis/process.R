@@ -166,7 +166,7 @@ data_processed <- data_extract %>%
 
 
     # https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007737/Greenbook_chapter_14a_30July2021.pdf#page=12
-    jcvi_cat = fct_case_when(
+    jcvi_group = fct_case_when(
       care_home_combined | age_mar20>=80 | hscworker  ~ "1 & 2",
       age_mar20>=75 ~ "3",
       age_mar20>=70 | (cev & (age_mar20>=16)) ~ "4",

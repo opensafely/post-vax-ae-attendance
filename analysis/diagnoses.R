@@ -50,7 +50,8 @@ data_diagnoses <- data_cohort %>%
     ind_emergency = censor_indicator(emergency_date, censor_date),
     vax1_week = lubridate::floor_date(vax1_date, unit="week", week_start=1),
     vax1_month = fct_reorder(format(vax1_date, "%b-%y"), vax1_date),
-    all=""
+    all="",
+    emergency_any_date = emergency_date
   )
 
 
@@ -100,14 +101,51 @@ survobj <- function(.data, diagnosis, group, threshold){
 }
 
 
-### overall ----
+redaction_threshold <- 5
+
+### overall ---
+
+surv_plot <-
+  survobj(data_diagnoses, "any", "all", redaction_threshold) %>%
+  filter(leadtime <= 14) %>%
+  ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
+  geom_step(aes(x=time, y=surv))+
+  geom_rect(aes(xmin=time, xmax=leadtime, ymin=surv.ll, ymax=surv.ul), alpha=0.1, colour="transparent")+
+  scale_color_brewer(type="qual", palette="Set2", na.value="grey")+
+  scale_fill_brewer(type="qual", palette="Set2", guide="none", na.value="grey")+
+  scale_x_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_y_continuous(expand = expansion(mult=c(0,0.01)))+
+  coord_cartesian(xlim=c(0, NA))+
+  labs(
+    x="Days since vaccination",
+    y="1 - emergency attendance rate",
+    colour=NULL,
+    fill=NULL,
+    title=NULL
+  )+
+  theme_minimal(base_size=9)+
+  theme(
+    legend.position = "bottom",
+    axis.line.x.top = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank(),
+    strip.text.y = element_text(angle = 0)
+  )
+
+ggsave(
+  surv_plot,
+  filename=here("output", "plot_surv.png"),
+  units="cm", width=15, height=15
+)
+
+### diagnosis ----
 
 surv_list <- vector("list", length(diagnoses))
 names(surv_list) <- diagnoses
 
 for(diagnosis in names(surv_list)){
   surv_list[[diagnosis]] <-
-    survobj(data_diagnoses, diagnosis, "all", 0) %>%
+    survobj(data_diagnoses, diagnosis, "all", redaction_threshold) %>%
     mutate(diagnosis = diagnosis)
 }
 
@@ -152,14 +190,14 @@ ggsave(
 
 
 
-### by month ----
+### diagnosis, by month ----
 
 surv_list <- vector("list", length(diagnoses))
 names(surv_list) <- diagnoses
 
 for(diagnosis in names(surv_list)){
   surv_list[[diagnosis]] <-
-    survobj(data_diagnoses, diagnosis, "vax1_month", 0) %>%
+    survobj(data_diagnoses, diagnosis, "vax1_month", redaction_threshold) %>%
     mutate(diagnosis = diagnosis)
 }
 
@@ -203,6 +241,56 @@ ggsave(
 )
 
 
+
+### diagnosis, by JVCI group ----
+
+surv_list <- vector("list", length(diagnoses))
+names(surv_list) <- diagnoses
+
+for(diagnosis in names(surv_list)){
+  surv_list[[diagnosis]] <-
+    survobj(data_diagnoses, diagnosis, "jcvi_group", redaction_threshold) %>%
+    mutate(diagnosis = diagnosis)
+}
+
+surv_long_jcvi <- bind_rows(surv_list) %>%
+  mutate(
+    diagnosis_short = factor(diagnosis, levels=diagnoses),
+    diagnosis_long = fct_recode(diagnosis,  !!!diagnoses),
+    diagnosis_wrap = fct_relabel(diagnosis_long, ~str_wrap(., 15)),
+  )
+
+surv_plot_jcvi <-
+  surv_long_jcvi %>%
+  filter(leadtime <= 14) %>%
+  ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
+  geom_step(aes(x=time, y=surv))+
+  geom_rect(aes(xmin=time, xmax=leadtime, ymin=surv.ll, ymax=surv.ul), alpha=0.1, colour="transparent")+
+  facet_grid(rows=vars(diagnosis_wrap), cols=vars(jcvi_group))+
+  scale_color_brewer(type="qual", palette="Set2", na.value="grey")+
+  scale_fill_brewer(type="qual", palette="Set2", guide="none", na.value="grey")+
+  scale_y_continuous(expand = expansion(mult=c(0,0.01)))+
+  coord_cartesian(xlim=c(0, NA))+
+  labs(
+    x="Days since vaccination",
+    y="1 - emergency attendance rate",
+    colour=NULL,
+    fill=NULL,
+    title=NULL
+  )+
+  theme_minimal(base_size=9)+
+  theme(
+    legend.position = "bottom",
+    axis.line.x = element_line(colour = "black"),
+    panel.grid.minor.x = element_blank(),
+    strip.text.y = element_text(angle = 0)
+  )
+
+ggsave(
+  surv_plot_jcvi,
+  filename=here("output", "diagnoses", "plot_diagnosis_surv_by_jcvi.png"),
+  units="cm", width=15, height=30
+)
 
 
 
@@ -258,7 +346,7 @@ vax_freq <-
 freqs <- diag_freq %>%
   left_join(vax_freq, by="vax1_type_descr") %>%
   mutate(
-    n=if_else(between(n,1,5), 3L, n), # rounding
+    n=if_else(between(n,1,redaction_threshold), 3L, n), # rounding
     pct=n/n_vax,
     day=as.numeric(day)
   )
