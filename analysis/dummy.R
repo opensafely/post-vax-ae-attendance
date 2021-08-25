@@ -237,4 +237,4 @@ dummydata_processed <- dummydata %>%
   rename_with(~str_replace(., "_day", "_date"), ends_with("_day"))
 
 
-write_feather(dummydata_processed, sink = here("output", "custominput.feather"))
+write_feather(dummydata_processed, sink = here("analysis", "lib", "custominput.feather"))
