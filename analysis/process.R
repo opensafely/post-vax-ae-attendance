@@ -169,7 +169,7 @@ data_processed <- data_extract %>%
     jcvi_cat = fct_case_when(
       care_home_combined | age_mar20>=80 | hscworker  ~ "1 & 2",
       age_mar20>=75 ~ "3",
-      age_mar20>=70 | (cev & agemar20 >=16) ~ "4",
+      age_mar20>=70 | (cev & (age_mar20>=16)) ~ "4",
       age_mar20>=65 ~ "5",
       between(age_mar20, 16, 64.999) & cv ~ "6",
       age_mar20>=60 ~ "7",
