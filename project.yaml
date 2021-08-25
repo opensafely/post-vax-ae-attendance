@@ -55,6 +55,8 @@ actions:
     run: r:latest analysis/diagnoses.R
     needs: [design, process]
     outputs:
+      highly_sensitive:
+        rds: output/diagnoses/*.rds
       moderately_sensitive:
         png: output/diagnoses/*.png
 
