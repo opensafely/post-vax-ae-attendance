@@ -111,10 +111,11 @@ surv_plot <-
   ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
   geom_step(aes(x=time, y=surv))+
   geom_rect(aes(xmin=time, xmax=leadtime, ymin=surv.ll, ymax=surv.ul), alpha=0.1, colour="transparent")+
+  geom_hline(aes(yintercept=1), colour='black')+
   scale_color_brewer(type="qual", palette="Set2", na.value="grey")+
   scale_fill_brewer(type="qual", palette="Set2", guide="none", na.value="grey")+
   scale_x_continuous(expand = expansion(mult=c(0,0.01)))+
-  scale_y_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_y_continuous(expand = expansion(mult=c(0,0)))+
   coord_cartesian(xlim=c(0, NA))+
   labs(
     x="Days since vaccination",
@@ -126,17 +127,17 @@ surv_plot <-
   theme_minimal(base_size=9)+
   theme(
     legend.position = "bottom",
-    axis.line.x.top = element_line(colour = "black"),
     axis.line.y = element_line(colour = "black"),
-    panel.grid.minor.x = element_blank(),
-    strip.text.y = element_text(angle = 0)
+    panel.grid.minor.x = element_blank()
   )
 
+write_rds(surv_plot, file = here("output", "diagnoses", "plot_surv.rds"), compress='gz')
 ggsave(
   surv_plot,
-  filename=here("output", "plot_surv.png"),
+  filename=here("output", "diagnoses", "plot_surv.png"),
   units="cm", width=15, height=15
 )
+
 
 ### diagnosis ----
 
@@ -156,16 +157,18 @@ surv_long <- bind_rows(surv_list) %>%
     diagnosis_wrap = fct_relabel(diagnosis_long, ~str_wrap(., 15)),
   )
 
-surv_plot <-
+surv_diagnosis_plot <-
   surv_long %>%
   filter(leadtime <= 14) %>%
   ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
   geom_step(aes(x=time, y=surv))+
   geom_rect(aes(xmin=time, xmax=leadtime, ymin=surv.ll, ymax=surv.ul), alpha=0.1, colour="transparent")+
-  facet_wrap(vars(diagnosis_wrap))+
+  geom_hline(aes(yintercept=1), colour='black')+
+  facet_wrap(vars(diagnosis_long))+
   scale_color_brewer(type="qual", palette="Set2", na.value="grey")+
   scale_fill_brewer(type="qual", palette="Set2", guide="none", na.value="grey")+
-  scale_y_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_x_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_y_continuous(expand = expansion(mult=c(0,0)))+
   coord_cartesian(xlim=c(0, NA))+
   labs(
     x="Days since vaccination",
@@ -177,14 +180,15 @@ surv_plot <-
   theme_minimal(base_size=9)+
   theme(
     legend.position = "bottom",
-    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black"),
     panel.grid.minor.x = element_blank(),
-    strip.text.y = element_text(angle = 0)
+    strip.text.y = element_text(angle = 0, hjust = 0)
   )
 
+write_rds(surv_diagnosis_plot, file = here("output", "diagnoses", "plot_diagnosis_surv.rds"), compress='gz')
 ggsave(
-  surv_plot,
-  filename=here("output", "plot_diagnosis_surv.png"),
+  surv_diagnosis_plot,
+  filename=here("output", "diagnoses", "plot_diagnosis_surv.png"),
   units="cm", width=15, height=15
 )
 
@@ -214,10 +218,12 @@ surv_plot_month <-
   ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
   geom_step(aes(x=time, y=surv))+
   geom_rect(aes(xmin=time, xmax=leadtime, ymin=surv.ll, ymax=surv.ul), alpha=0.1, colour="transparent")+
-  facet_grid(rows=vars(diagnosis_wrap), cols=vars(vax1_month))+
+  geom_hline(aes(yintercept=1), colour='black')+
+  facet_grid(rows=vars(diagnosis_long), cols=vars(vax1_month))+
   scale_color_brewer(type="qual", palette="Set2", na.value="grey")+
   scale_fill_brewer(type="qual", palette="Set2", guide="none", na.value="grey")+
-  scale_y_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_x_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_y_continuous(expand = expansion(mult=c(0,0)))+
   coord_cartesian(xlim=c(0, NA))+
   labs(
     x="Days since vaccination",
@@ -229,14 +235,15 @@ surv_plot_month <-
   theme_minimal(base_size=9)+
   theme(
     legend.position = "bottom",
-    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black"),
     panel.grid.minor.x = element_blank(),
-    strip.text.y = element_text(angle = 0)
+    strip.text.y = element_text(angle = 0, hjust = 0)
   )
 
+write_rds(surv_plot_month, file = here("output", "diagnoses", "plot_diagnosis_surv_month.rds"), compress='gz')
 ggsave(
   surv_plot_month,
-  filename=here("output", "diagnoses", "plot_diagnosis_surv_by_month.png"),
+  filename=here("output", "diagnoses", "plot_diagnosis_surv_month.png"),
   units="cm", width=15, height=30
 )
 
@@ -266,10 +273,12 @@ surv_plot_jcvi <-
   ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
   geom_step(aes(x=time, y=surv))+
   geom_rect(aes(xmin=time, xmax=leadtime, ymin=surv.ll, ymax=surv.ul), alpha=0.1, colour="transparent")+
-  facet_grid(rows=vars(diagnosis_wrap), cols=vars(jcvi_group))+
+  geom_hline(aes(yintercept=1), colour='black')+
+  facet_grid(rows=vars(diagnosis_long), cols=vars(jcvi_group))+
   scale_color_brewer(type="qual", palette="Set2", na.value="grey")+
   scale_fill_brewer(type="qual", palette="Set2", guide="none", na.value="grey")+
-  scale_y_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_x_continuous(expand = expansion(mult=c(0,0.01)))+
+  scale_y_continuous(expand = expansion(mult=c(0,0)))+
   coord_cartesian(xlim=c(0, NA))+
   labs(
     x="Days since vaccination",
@@ -281,14 +290,15 @@ surv_plot_jcvi <-
   theme_minimal(base_size=9)+
   theme(
     legend.position = "bottom",
-    axis.line.x = element_line(colour = "black"),
+    axis.line.y = element_line(colour = "black"),
     panel.grid.minor.x = element_blank(),
-    strip.text.y = element_text(angle = 0)
+    strip.text.y = element_text(angle = 0, hjust = 0)
   )
 
+write_rds(surv_plot_jcvi, file = here("output", "diagnoses", "plot_diagnosis_surv_jcvi.rds"), compress='gz')
 ggsave(
   surv_plot_jcvi,
-  filename=here("output", "diagnoses", "plot_diagnosis_surv_by_jcvi.png"),
+  filename=here("output", "diagnoses", "plot_diagnosis_surv_jcvi.png"),
   units="cm", width=15, height=30
 )
 
