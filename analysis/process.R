@@ -164,6 +164,8 @@ data_processed <- data_extract %>%
     cv = immunosuppressed | chronic_kidney_disease | chronic_resp_disease | diabetes | chronic_liver_disease |
       chronic_neuro_disease | chronic_heart_disease | asplenia | learndis | sev_mental,
 
+
+    # https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007737/Greenbook_chapter_14a_30July2021.pdf#page=12
     jcvi_cat = fct_case_when(
       care_home_combined | age_mar20>=80 | hscworker  ~ "1 & 2",
       age_mar20>=75 ~ "3",
