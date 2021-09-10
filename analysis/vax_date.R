@@ -82,7 +82,7 @@ plot_stack <-
       labels = scales::date_format("%b %y")
     )
   )+
-  scale_fill_brewer(type="qual", palette="Set2")+
+  scale_fill_brewer(type="qual", palette="Set1")+
   labs(
     x="Date",
     y="Vaccinated, n",
@@ -118,7 +118,7 @@ plot_step <-
       labels = scales::date_format("%b %y")
     )
   )+
-  scale_colour_brewer(type="qual", palette="Set2")+
+  scale_colour_brewer(type="qual", palette="Set1")+
   labs(
     x="Date",
     y="Vaccinated, n",
@@ -189,7 +189,7 @@ plot_stack <-
       labels = scales::date_format("%b %y")
     )
   )+
-  scale_fill_brewer(type="qual", palette="Set2")+
+  scale_fill_brewer(type="qual", palette="Set1")+
   labs(
     x="Date",
     y="Vaccinated, n",
@@ -227,7 +227,7 @@ plot_step <-
       labels = scales::date_format("%b %y")
     )
   )+
-  scale_colour_brewer(type="qual", palette="Set2")+
+  scale_colour_brewer(type="qual", palette="Set1")+
   labs(
     x="Date",
     y="Vaccinated, n",

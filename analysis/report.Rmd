@@ -1,15 +1,15 @@
 ---
 title: "Post-vaccination Accident and Emergency Department Attendances"
 output:
-  #github_document:
+  html_document:
+    keep_md: yes
   #  keep_html: TRUE
   #  code_folding: hide
   #  keep_md: yes
   #pdf_document: default
   #md_document:
   #   variant: gfm
-  html_document:
-    keep_md: yes
+  #github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +35,12 @@ studydates <- jsonlite::read_json(
   path=here("analysis", "lib", "dates.json")
 )
 
-lookup <- read_rds(here("analysis", "lib", "diagnosis_groups_lookup.rds")) 
+lookup <- read_rds(here("analysis", "lib", "diagnosis_groups_lookup.rds"))  %>%
+  mutate(
+    diagnosis_col_names =  paste0("emergency_", group, "_date"),
+    diagnosis_short = group,
+    diagnosis_long = ECDS_GroupCustom,
+  )
 
 ```
 
@@ -98,7 +103,7 @@ read_rds(here("output", "table1", "table1.rds"))
 ### Overall
 
 ```{r, surv, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', results='asis'}
-  surv_plot <- read_rds(here("output", "diagnoses", "plot_surv.rds"))
+  surv_plot <- read_rds(here("output", "diagnoses", "plot_any_surv.rds"))
   print(surv_plot)
   cat("  \n\n")
 ```
@@ -106,26 +111,30 @@ read_rds(here("output", "table1", "table1.rds"))
 ### Diagnosis-specific attendances
 
 ```{r, surv_diagnosis, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=6, results='asis'}
-  surv_plot <- read_rds(here("output", "diagnoses", "plot_diagnosis_surv.rds"))
-  print(surv_plot)
-  cat("  \n\n")
+
+  for (diagnosis in lookup$diagnosis_short){
+    
+    dignosis_long <- lookup$diagnosis_long[lookup$diagnosis_short == diagnosis]
+    
+    cat("#### ", dignosis_long)
+    cat("  \n\n")  
+    surv_plot <- read_rds(here("output", "diagnoses", glue("plot_{diagnosis}_surv.rds")))
+    print(surv_plot+ggtitle(NULL))
+    cat("  \n\n")  
+    
+    surv_plot_month <- read_rds(here("output", "diagnoses", glue("plot_{diagnosis}_surv_month.rds")))
+    print(surv_plot_month+ggtitle("By month of vaccination"))
+    cat("  \n\n")  
+    
+    surv_plot_jcvi <- read_rds(here("output", "diagnoses", glue("plot_{diagnosis}_surv_jcvi.rds")))
+    print(surv_plot_jcvi+ggtitle("By JCVI group"))
+    
+    cat("  \n\n")  
+  }
+  
 ```
 
 
-### Diagnosis-specific attendances, by JCVI group
-
-```{r, surv_diagnosis_jcvi, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%',fig.height=8, results='asis'}
-  surv_plot <- read_rds(here("output", "diagnoses", "plot_diagnosis_surv_jcvi.rds"))
-  print(surv_plot)
-  cat("  \n\n")
-```
 
 
-### Diagnosis-specific attendances, by month of vaccination
-
-```{r, surv_diagnosis_month, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=8,  results='asis'}
-  surv_plot <- read_rds(here("output", "diagnoses", "plot_diagnosis_surv_month.rds"))
-  print(surv_plot)
-  cat("  \n\n")
-```
 
