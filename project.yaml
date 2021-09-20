@@ -11,8 +11,8 @@ actions:
     outputs:
       moderately_sensitive:
         dates: analysis/lib/dates.json
-        groups: analysis/lib/diagnosis_groups.json
-        lookup: analysis/lib/diagnosis_groups_lookup.rds
+        groups: analysis/lib/diagnosis_codes.json
+        lookup: analysis/lib/diagnosis_codes_lookup.rds
         labels: analysis/lib/variable_labels.rds
 
 

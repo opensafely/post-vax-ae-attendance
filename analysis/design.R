@@ -7,6 +7,7 @@
 # Import libraries ----
 library('tidyverse')
 library('here')
+library('glue')
 
 # create output directories ----
 fs::dir_create(here("analysis", "lib"))
@@ -27,35 +28,48 @@ jsonlite::write_json(dates, path = here("analysis", "lib", "dates.json"), auto_u
 
 # parse diagnosis codes ----
 
-diagnosis_codes <- readxl::read_xlsx(here("analysis", "lib", "diagnosis_groups.xlsx"))
+# choose which grouping to use here
+GroupCustom <- 2
 
+# import codes and group look-up
+diagnosis_list <- readxl::read_xlsx(here("analysis", "lib", "diagnosis_codes.xlsx"), sheet="diagnoses")
+diagnosis_lookup <- readxl::read_xlsx(here("analysis", "lib", "diagnosis_codes.xlsx"), sheet="groupings") %>%
+  filter(grouping==GroupCustom) %>%
+  select(-grouping)
+
+# one row per group
 diagnosis_groups <-
-  diagnosis_codes %>%
-  rename(group = ECDS_GroupCustomShort) %>%
-  mutate(
-    group = if_else(is.na(group), "na", group)
-  ) %>%
-  group_by(ECDS_GroupCustom, group) %>%
+  diagnosis_list %>%
+  rename(group = glue("ECDS_GroupCustom{GroupCustom}")) %>%
+  group_by(group) %>%
   summarise(
     codelist = list(SNOMED_Code)
   ) %>%
+  left_join(diagnosis_lookup, by="group") %>%
   ungroup()
 
+## check groupings ----
 
-#table(diagnosis_groups$ECDS_GroupCustom, diagnosis_groups$group, useNA='ifany')
-#table(diagnosis_groups$group, diagnosis_groups$ECDS_GroupCustom,  useNA='ifany')
+check_groups_a <- unique(diagnosis_list[[glue("ECDS_GroupCustom{GroupCustom}")]])
+check_groups_b <-diagnosis_lookup %>%
+  pull(group) %>%
+  unique()
+stopifnot("some diagnosis groups in sheet are not present in look-up" = all(check_groups_a %in% check_groups_b))
+stopifnot("some diagnosis groups in look-up are not present in sheet" = all(check_groups_b %in% check_groups_a))
 
+
+## output formatted codes ----
 diagnosis_groups %>%
   select(group, codelist) %>%
   {set_names(.$codelist, .$group)} %>% # convert tibble to list in a slightly awkward way
   jsonlite::write_json(
-    path = here("analysis", "lib", "diagnosis_groups.json"),
+    path = here("analysis", "lib", "diagnosis_codes.json"),
     #    flatten = TRUE
   )
 
 diagnosis_groups %>%
-  select(group, ECDS_GroupCustom, codelist) %>%
-  write_rds(path = here("analysis", "lib", "diagnosis_groups_lookup.rds"))
+  select(group, description, codelist) %>%
+  write_rds(path = here("analysis", "lib", "diagnosis_codes_lookup.rds"))
 
 
 
