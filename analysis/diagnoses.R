@@ -26,11 +26,11 @@ studydates <- jsonlite::read_json(
 fs::dir_create(here("output", "diagnoses"))
 
 ## load A&E diagnosis column names
-lookup <- read_rds(here("analysis", "lib", "diagnosis_groups_lookup.rds")) %>%
+lookup <- read_rds(here("analysis", "lib", "diagnosis_codes_lookup.rds")) %>%
   mutate(
     diagnosis_col_names =  paste0("emergency_", group, "_date"),
     diagnosis_short = group,
-    diagnosis_long = ECDS_GroupCustom,
+    diagnosis_long = description,
   ) %>%
   add_row(
     diagnosis_short="unknown",

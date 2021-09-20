@@ -13,13 +13,14 @@ library('dd4d')
 population_size <- 10000
 
 # import globally defined repo variables from
-studydates <- jsonlite::fromJSON(
-  txt="./analysis/lib/dates.json"
+studydates <- jsonlite::read_json(
+  path=here("analysis", "lib", "dates.json")
 )
 
-diagnosis_codes <- jsonlite::fromJSON(
-  txt="./analysis/lib/diagnosis_groups.json"
+diagnosis_codes <- jsonlite::read_json(
+  path=here("analysis","lib","diagnosis_codes.json")
 )
+
 diagnosis_simfunction_list = set_names(
   rep(list(bn_node(~emergency_day, missing_rate=~0.95, needs="emergency_day")), length(diagnosis_codes)),
   paste0("emergency_", names(diagnosis_codes), "_day")

@@ -40,7 +40,7 @@ def days(datestring, days):
 
 
 ## function for diagnosis-specific A&E attendances
-with open("./analysis/lib/diagnosis_groups.json") as f:
+with open("./analysis/lib/diagnosis_codes.json") as f:
   diagnosis_groups = json.load(f)
 
 def emergency_bydiagnosis_date(codelist_dict, on_date):
