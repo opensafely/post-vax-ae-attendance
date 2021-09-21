@@ -29,7 +29,7 @@ studydates <- jsonlite::read_json(
 
 ## load A&E diagnosis column names
 diagnosis_codes <- jsonlite::read_json(
-  path = here("analysis","lib","diagnosis_groups.json")
+  path = here("analysis","lib","diagnosis_codes.json")
 )
 diagnosis_col_names <- paste0("emergency_", names(diagnosis_codes), "_date")
 diagnosis_short <- str_remove(str_remove(diagnosis_col_names, "emergency_"), "_date")
