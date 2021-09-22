@@ -72,7 +72,7 @@ plot_stack <-
     alpha=0.5
   )+
   scale_x_date(
-    breaks = seq(floor_date(min(cumulvax$vax1_date), "month"), max(cumulvax$vax1_date)+1,by=14),
+    breaks = seq(floor_date(min(cumulvax$vax1_date), "month"), max(cumulvax$vax1_date)+1,by=28),
     limits = c(lubridate::floor_date(min(cumulvax$vax1_date), "1 month"), NA),
     labels = scales::date_format("%d/%m"),
     expand = expansion(0),
@@ -92,6 +92,7 @@ plot_stack <-
   ) +
   theme_minimal()+
   theme(
+    axis.line.x.bottom=element_line(),
     axis.text.x.top=element_text(hjust=0),
     axis.ticks.x.top=element_line(),
     legend.position = "bottom"
@@ -108,7 +109,7 @@ plot_step <-
     )
   )+
   scale_x_date(
-    breaks = seq(floor_date(min(cumulvax$vax1_date), "month"), max(cumulvax$vax1_date)+1,by=14),
+    breaks = seq(floor_date(min(cumulvax$vax1_date), "month"), max(cumulvax$vax1_date)+1,by=28),
     limits = c(lubridate::floor_date((min(cumulvax$vax1_date)), "1 month"), NA),
     labels = scales::date_format("%d/%m"),
     expand = expansion(0),
@@ -118,6 +119,7 @@ plot_step <-
       labels = scales::date_format("%b %y")
     )
   )+
+  scale_y_continuous(expand = expansion(mult=c(0,NA)))+
   scale_colour_brewer(type="qual", palette="Set1")+
   labs(
     x="Date",
@@ -128,6 +130,7 @@ plot_step <-
   ) +
   theme_minimal()+
   theme(
+    axis.line.x.bottom=element_line(),
     axis.text.x.top=element_text(hjust=0),
     axis.ticks.x.top=element_line(),
     legend.position = "bottom"

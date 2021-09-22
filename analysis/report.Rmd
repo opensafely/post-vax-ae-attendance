@@ -40,8 +40,7 @@ lookup <- read_rds(here("analysis", "lib", "diagnosis_codes_lookup.rds"))  %>%
     diagnosis_col_names =  paste0("emergency_", group, "_date"),
     diagnosis_short = group,
     diagnosis_long = description,
-  )
-
+  ) 
 ```
 
 # Introduction
@@ -55,10 +54,11 @@ The code and data for this report can be found at the OpenSafely [post-vax-ae_at
 
 People meeting the following criteria are included:
 
-* People receiving their ever first vaccine dose as part of the national COVID-19 vaccination programme (i.e., not administered in clinical trials):
+* People receiving their first vaccine dose as part of the national COVID-19 vaccination programme (i.e., not administered in clinical trials):
   * BNT162b2 received on or after `r format(as.Date(studydates$start_date_pfizer), "%d %B %Y")`;
   * ChAdOx1 received on or after `r format(as.Date(studydates$start_date_az), "%d %B %Y")`;
   * Moderna received on or after `r format(as.Date(studydates$start_date_moderna), "%d %B %Y")`.
+* Vaccinated on or before `r format(as.Date(studydates$end_date), "%d %B %Y")`
 * Registered at a GP practice using TPP's SystmOne clinical information system on the day before vaccination.
 * Aged 16 or over.
 
@@ -94,13 +94,13 @@ read_rds(here("output", "table1", "table1.rds"))
   cat("  \n\n")
 ```
 
-### By JCVI priority group
+<!-- ### By JCVI priority group -->
 
-```{r, vaxdate_jcvi, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=8, results='asis'}
-  vaxdate_plot <- read_rds(here("output", "vaxdate", "plot_vaxdate_stack_jcvi.rds"))
-  print(vaxdate_plot)
-  cat("  \n\n")
-```
+<!-- ```{r, vaxdate_jcvi, echo=FALSE, message=FALSE, warning=FALSE, out.width='80%', fig.height=8, results='asis'} -->
+<!--   vaxdate_plot <- read_rds(here("output", "vaxdate", "plot_vaxdate_stack_jcvi.rds")) -->
+<!--   print(vaxdate_plot) -->
+<!--   cat("  \n\n") -->
+<!-- ``` -->
 
 ## Accident and Emergency attendance
 

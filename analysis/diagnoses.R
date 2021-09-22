@@ -155,7 +155,7 @@ for(diagnosis in c("any", diagnoses)){
 
   surv_diagnosis_plot <-
     surv_obj %>%
-    filter(leadtime <= 14) %>%
+    filter(leadtime <= 21) %>%
     ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
     geom_step(aes(x=time, y=1-surv))+
     geom_rect(aes(xmin=time, xmax=leadtime, ymin=1-surv.ll, ymax=1-surv.ul), alpha=0.1, colour="transparent")+
@@ -165,7 +165,7 @@ for(diagnosis in c("any", diagnoses)){
     scale_fill_brewer(type="qual", palette="Set1", guide="none", na.value="grey")+
     scale_x_continuous(expand = expansion(mult=c(0,0.01)), breaks = seq(0,7*10, 7))+
     scale_y_continuous(expand = expansion(mult=c(0)))+
-    coord_cartesian(xlim=c(0, 15))+
+    coord_cartesian(xlim=c(0, 21))+
     labs(
       x="Days since vaccination",
       y="Incidence",
@@ -198,17 +198,17 @@ for(diagnosis in c("any", diagnoses)){
 
   surv_plot_month <-
     surv_obj %>%
-    filter(leadtime <= 14) %>%
-    ggplot(aes(group=vax1_month, colour=vax1_month, fill=vax1_month)) +
+    filter(leadtime <= 21) %>%
+    ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
     geom_step(aes(x=time, y=1-surv))+
     geom_rect(aes(xmin=time, xmax=leadtime, ymin=1-surv.ll, ymax=1-surv.ul), alpha=0.05, colour="transparent")+
     geom_hline(aes(yintercept=0), colour='black')+
-    facet_grid(cols=vars(vax1_type_descr))+
-    scale_color_viridis_d(na.value="grey")+
-    scale_fill_viridis_d(guide="none", na.value="grey")+
+    facet_wrap(vars(vax1_month), ncol=3)+
+    scale_color_brewer(type="qual", palette="Set1", na.value="grey")+
+    scale_fill_brewer(type="qual", palette="Set1", guide="none", na.value="grey")+
     scale_x_continuous(expand = expansion(mult=c(0,0.01)), breaks = seq(0,7*10, 7))+
     scale_y_continuous(expand = expansion(mult=c(0,0)))+
-    coord_cartesian(xlim=c(0, 15))+
+    coord_cartesian(xlim=c(0, 21))+
     labs(
       x="Days since vaccination",
       y="Incidence",
@@ -243,17 +243,17 @@ for(diagnosis in c("any", diagnoses)){
 
   surv_plot_jcvi <-
     surv_obj %>%
-    filter(leadtime <= 14) %>%
-    ggplot(aes(group=jcvi_group, colour=jcvi_group, fill=jcvi_group)) +
+    filter(leadtime <= 21) %>%
+    ggplot(aes(group=vax1_type_descr, colour=vax1_type_descr, fill=vax1_type_descr)) +
     geom_step(aes(x=time, y=1-surv))+
     geom_rect(aes(xmin=time, xmax=leadtime, ymin=1-surv.ll, ymax=1-surv.ul), alpha=0.1, colour="transparent")+
     geom_hline(aes(yintercept=0), colour='black')+
-    facet_grid(cols=vars(vax1_type_descr))+
+    facet_wrap(vars(jcvi_group), ncol=3)+
     scale_color_brewer(type="qual", palette="Set1", na.value="grey")+
     scale_fill_brewer(type="qual", palette="Set1", guide="none", na.value="grey")+
     scale_x_continuous(expand = expansion(mult=c(0,0.01)), breaks = seq(0,7*10, 7))+
     scale_y_continuous(expand = expansion(mult=c(0,0)))+
-    coord_cartesian(xlim=c(0, 15))+
+    coord_cartesian(xlim=c(0, 21))+
     labs(
       x="Days since vaccination",
       y="Incidence",
