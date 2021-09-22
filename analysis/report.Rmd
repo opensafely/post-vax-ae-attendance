@@ -47,7 +47,7 @@ lookup <- read_rds(here("analysis", "lib", "diagnosis_codes_lookup.rds"))  %>%
 
 Three vaccines have been used as part of the national COVID-19 vaccination programme in England to date: Pfizer-BioNTech BNT162b2 mRNA (*BNT162b2*), Oxford-AstraZeneca ChAdOx1 nCoV-19 (*ChAdOx1*), and Moderna mRNA-1273 (*Moderna*). This report describes rates of attendances to accident and emergency departments (A&E) in the first 2 weeks following the first recorded dose of these vaccines. 
 
-The code and data for this report can be found at the OpenSafely [post-vax-ae_attendances GitHub repository](https://github.com/opensafely/post-vax-ae-attendances). 
+The code and data for this report can be found at the OpenSafely [post-vax-ae-attendances GitHub repository](https://github.com/opensafely/post-vax-ae-attendances). 
 
 
 # Methods
@@ -66,12 +66,18 @@ The vaccination brand is available in the GP record directly, via the National I
 
 A&E attendances are identified using linked data from the Emergency Care Data Set (ECDS) provided by NHS Digital's Secondary Use Service (SUS), which holds records on all attendances to A&E departments. For each A&E attendance, one or more diagnosis codes are recorded. These have been categorised into `r nrow(lookup)` categories, as follows: `r paste(lookup$diagnosis_long, collapse="; ")`.
 
+Vaccine recipients are classified into one of the [10 vaccine priority groups defined by the Joint Committee on Vaccination and Immunisation (JCVI)](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007737/Greenbook_chapter_14a_30July2021.pdf#page=12) expert working group. These are based on demographic, clinical, or occupational characteristics identified on or before the vaccination date, except for age, which is determined as of 31 March 2020. These are:
 
-
-Vaccine recipients are classified into one of the [10 vaccine priority groups defined by the Joint Committee on Vaccination and Immunisation (JCVI)](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1007737/Greenbook_chapter_14a_30July2021.pdf#page=12) expert working group. These are based on demographic, clinical, or occupational characteristics identified on or before the vaccination date, except for age, which is determined as of 31 March 2020.
-
-
-
+1. Residents in a care home for older adults; Staff working in care homes for older adults
+2. All those 80 years of age and over; Frontline health and social care workers
+3. All those 75 years of age and over
+4. All those 70 years of age and over; Individuals aged 16 to 69 in a high risk group
+5. All those 65 years of age and over
+6. Adults aged 16 to 65 years in an at-risk group
+7. All those 60 years of age and over
+8. All those 55 years of age and over
+9. All those 50 years of age and over
+10. Everybody else.
 
 # Results
 
