@@ -19,8 +19,8 @@ dates <-
     start_date = "2020-12-08",
     start_date_pfizer = "2020-12-08",
     start_date_az = "2021-01-04",
-    start_date_moderna = "2021-03-04",
-    end_date = "2021-06-01"
+    start_date_moderna = "2021-04-07",
+    end_date = "2021-08-01"
   )
 
 jsonlite::write_json(dates, path = here("analysis", "lib", "dates.json"), auto_unbox = TRUE, pretty=TRUE)

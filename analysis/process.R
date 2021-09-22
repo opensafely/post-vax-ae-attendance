@@ -302,7 +302,8 @@ data_cohort <-
     (vax1_type=="pfizer" & vax1_date >= start_date_pfizer) |
     (vax1_type=="az" & vax1_date >= start_date_az) |
     (vax1_type=="moderna" & vax1_date >= start_date_moderna),
-    vax1_type %in% c("pfizer", "az", "moderna")
+    vax1_type %in% c("pfizer", "az", "moderna"),
+    vax1_date <= end_date
   )
 
 write_rds(data_cohort, here("output", "data", "data_cohort.rds"), compress="gz")
