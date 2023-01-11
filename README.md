@@ -1,14 +1,8 @@
 # post-vax-ae-attendance
 
-This is the code and configuration for post-vax-ae-attendance.
+This is the code for a short study investigating the causes (discharge diagnoses) of A&E attendances shortly after vacacination. It is no longer under active development.
 
-You can run this project via [Gitpod](https://gitpod.io) in a web browser by clicking on this badge: [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/opensafely/post-vax-ae-attendance)
-
-* The paper is [here]()
-* Raw model outputs, including charts, crosstabs, etc, are in `released_outputs/`
-* If you are interested in how we defined our variables, take a look at the [study definition](analysis/study_definition.py); this is written in `python`, but non-programmers should be able to understand what is going on there
-* If you are interested in how we defined our code lists, look in the [codelists folder](./codelists/).
-* Developers and epidemiologists interested in the framework should review [the OpenSAFELY documentation](https://docs.opensafely.org)
+It was prompted by the apparent increase in A&E visits in the first few days following vaccination. Ultimately, this was due to a combination of patients with "no abnormality detected", some relatively common, mild vaccine-related side-effects, and a small number of rare and serious side-effects which are more robustly investigated elsewhere.
 
 # About the OpenSAFELY framework
 
