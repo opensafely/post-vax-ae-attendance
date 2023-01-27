@@ -1,8 +1,13 @@
 # post-vax-ae-attendance
 
-This is the code for a short study investigating the causes (discharge diagnoses) of A&E attendances shortly after vacacination. It is no longer under active development.
+[View on OpenSAFELY](https://jobs.opensafely.org/repo/https%253A%252F%252Fgithub.com%252Fopensafely%252Fpost-vax-ae-attendance)
 
-It was prompted by the apparent increase in A&E visits in the first few days following vaccination. Ultimately, this was due to a combination of patients with "no abnormality detected", some relatively common, mild vaccine-related side-effects, and a small number of rare and serious side-effects which are more robustly investigated elsewhere.
+Details of the purpose and any published outputs from this project can be found at the link above.
+
+The contents of this repository MUST NOT be considered an accurate or valid representation of the study or its purpose. 
+This repository may reflect an incomplete or incorrect analysis with no further ongoing work.
+The content has ONLY been made public to support the OpenSAFELY [open science and transparency principles](https://www.opensafely.org/about/#contributing-to-best-practice-around-open-science) and to support the sharing of re-usable code for other subsequent users.
+No clinical, policy or safety conclusions must be drawn from the contents of this repository.
 
 # About the OpenSAFELY framework
 
